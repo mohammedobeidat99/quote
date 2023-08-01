@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../constant/colors.dart';
-import '../model/category.dart';
-import 'package:share/share.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:quote/constant/colors.dart';
+import 'package:share/share.dart';
+
+import '../model/category.dart';
+import 'favorites_screen.dart';
 
 class QuotesPage extends StatefulWidget {
   final Category category;
@@ -16,6 +18,9 @@ class QuotesPage extends StatefulWidget {
 }
 
 class _QuotesPageState extends State<QuotesPage> {
+  final Favorites _favorites = Favorites();
+  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -27,12 +32,13 @@ class _QuotesPageState extends State<QuotesPage> {
             style: const TextStyle(
               fontFamily: 'Lateef',
               fontSize: 28,
-              color: Color2.main4,
+              color: Colors.white,
               fontWeight: FontWeight.w400,
             ),
             textAlign: TextAlign.right,
           ),
           centerTitle: true,
+          
         ),
         body: AnimationLimiter(
           child: ListView.builder(
@@ -53,16 +59,11 @@ class _QuotesPageState extends State<QuotesPage> {
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 1,
                             blurRadius: 5,
-                            offset: Offset(0, 5), // changes position of shadow
+                            offset: Offset(0, 5),
                           ),
                         ],
-                        color: Color2.main4,
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(10),
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(40),
-                          bottomLeft: Radius.circular(40),
-                        ),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       height: 225,
                       margin:
@@ -101,7 +102,7 @@ class _QuotesPageState extends State<QuotesPage> {
                                   ),
                                 ),
                               ),
-                              Divider(
+                             const Divider(
                                 thickness: 1,
                                 color: Colors.grey,
                                 endIndent: 60,
@@ -125,11 +126,9 @@ class _QuotesPageState extends State<QuotesPage> {
                                           content: Text(
                                             'تم نسخ النص إلى الحافظة',
                                             textAlign: TextAlign.right,
-                                            style: TextStyle(
-                                                color: Color2.main4,
-                                                fontSize: 15),
                                           ),
                                           backgroundColor: Color2.main2,
+                                          duration: Duration(seconds: 1),
                                         ),
                                       );
                                     },
@@ -137,13 +136,22 @@ class _QuotesPageState extends State<QuotesPage> {
                                   IconButton(
                                     icon: Icon(
                                       Icons.favorite,
-                                      color: Color.fromARGB(255, 243, 71, 59),
+                                      color: _favorites.favoriteQuotes
+                                              .contains(quote.text!)
+                                          ? Colors.red
+                                          : Colors.grey,
                                     ),
                                     onPressed: () {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(content: Text('Add favorite')),
-                                      );
+                                      setState(() {
+                                        if (_favorites.favoriteQuotes
+                                            .contains(quote.text!)) {
+                                          _favorites.removeQuoteFromFavorites(
+                                              quote.text!);
+                                        } else {
+                                          _favorites.addQuoteToFavorites(
+                                              quote.text!);
+                                        }
+                                      });
                                     },
                                   ),
                                   IconButton(

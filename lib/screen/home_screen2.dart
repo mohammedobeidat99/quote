@@ -10,9 +10,11 @@ import 'package:lottie/lottie.dart';
 
 import '../data/data_quotes.dart';
 import '../model/category.dart';
+import '../widget/drawer.dart';
+import 'favorites_screen.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key});
+  const Home({Key? key, Function? toggle});
 
   @override
   _HomeState createState() => _HomeState();
@@ -28,8 +30,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    
 
     // Initialize animation controller
     _animationController = AnimationController(
@@ -62,7 +62,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void dispose() {
     _animationController.dispose();
     _connectivitySubscription.cancel();
-  
 
     super.dispose();
   }
@@ -134,45 +133,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   ),
                   centerTitle: true,
                 ),
-                drawer: Drawer(
-                  child: ListView(
-                    children: <Widget>[
-                      UserAccountsDrawerHeader(
-                        accountName: Text(
-                          'Mohammed Obeidat',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        accountEmail: Text(
-                          'obeidatmohammed80@gmail.com',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        currentAccountPicture: CircleAvatar(
-                          child: Icon(Icons.person),
-                        ),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.home),
-                        title: Text(
-                          'Home',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        onTap: () {
-                          // Handle drawer item tap
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.settings),
-                        title: Text(
-                          'Settings',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        onTap: () {
-                          // Handle drawer item tap
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                drawer: Drawerquote(),
                 body: (_connectivityResult == ConnectivityResult.none)
                     ? _hideContent() // Show no internet connection notification
 
@@ -193,17 +154,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           //   size: 80,
           //   color: Colors.red,
           // ),
-            Lottie.asset(
+          Lottie.asset(
             'assets/lottie/animation_lk14ctix.json',
             width: 130,
             height: 130,
             fit: BoxFit.fill,
           ),
-        
+
           SizedBox(height: 16),
           Text(
             'لا يوجد اتصال بالإنترنت',
-            style: TextStyle(fontSize: 25 ,fontFamily: 'Lateef',color: Color2.main2),
+            style: TextStyle(
+                fontSize: 25, fontFamily: 'Lateef', color: Color2.main2),
           ),
         ],
       ),
